@@ -6,12 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 class CatalogReaderTest {
 
-    DBCatalogReader catalogReader;
+    private DBCatalogReader catalogReader;
 
     @BeforeEach
     public void initialize(){
@@ -20,8 +21,7 @@ class CatalogReaderTest {
 
     @Test
     void getDatabaseCatalog_Test() {
-        ;
-        List<String> dbBag=null;
+        List<String> dbBag= Collections.emptyList();
         try {
             dbBag=catalogReader.getDatabaseCatalog();
         }catch (SQLException e){
@@ -32,7 +32,7 @@ class CatalogReaderTest {
 
     @Test
     void getTableCatalog_Test(){
-        List<String> tableBag=null;
+        List<String> tableBag=Collections.emptyList();
         try{
             tableBag=catalogReader.getTableCatalog("test");
         }catch(SQLException e){
@@ -43,7 +43,7 @@ class CatalogReaderTest {
 
     @Test
     void getFieldCatalog(){
-        List<String> fieldBag=null;
+        List<String> fieldBag=Collections.emptyList();
         try{
             fieldBag=catalogReader.getFieldCatalog("test","pet");
         }catch (SQLException e){

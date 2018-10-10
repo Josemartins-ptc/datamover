@@ -11,16 +11,12 @@ import java.util.List;
 @Slf4j
 public class DBCatalogReader {
 
-    private static Connection conn;
+    private static final Connection conn;
 
     static {
-        try {
-            conn = DBConnection.getConection();
-            log.info("DB Connection Opened");
-        }catch(SQLException e){
-            log.info("failed to connect to DB");
-        }
+            conn = DBConnection.getConnection();
     }
+
     public List<String> getDatabaseCatalog() throws SQLException{
         List<String> databaseBag=new ArrayList<>();
         ResultSet rs= conn.getMetaData().getCatalogs();
@@ -30,7 +26,7 @@ public class DBCatalogReader {
             return databaseBag;
     }
 
-    public List<String> getTableCatalog(String databaseName)throws SQLException{
+    public List<String> getTableCatalog(final String databaseName)throws SQLException{
         List<String> tableBag=new ArrayList<>();
         String[] types = {"TABLE"};
         ResultSet rs=conn.getMetaData().getTables(databaseName,null,"%",types);
@@ -40,7 +36,7 @@ public class DBCatalogReader {
         return tableBag;
     }
 
-    public List<String> getFieldCatalog(String dataBaseName,String tableName) throws SQLException{
+    public List<String> getFieldCatalog(final String dataBaseName,final String tableName) throws SQLException{
         List<String> fieldsBag=new ArrayList<>();
         ResultSet rs= conn.getMetaData().getColumns(dataBaseName,null,tableName,"%");
         while (rs.next()){

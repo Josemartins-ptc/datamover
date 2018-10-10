@@ -11,11 +11,12 @@ import java.util.Properties;
 
 @Slf4j
 public class DBConnection {
-    static Connection con =null;
 
-    private DBConnection(){}//do not instantiate...KindOf Singleton
+    private static Connection conn =null;
 
-    public static Connection getConection() throws SQLException{
+    private DBConnection(){}//Kind Of Singleton
+
+    public static Connection getConnection(){
 
         Properties props=new Properties();
         FileInputStream fileInputStream;
@@ -25,26 +26,24 @@ public class DBConnection {
             props.load(fileInputStream);
 
             Class.forName(props.getProperty("DB_DRIVER_CLASS"));
-            if (con==null) {
-                con = DriverManager.
+            if (conn ==null) {
+                conn = DriverManager.
                         getConnection(props.getProperty("DB_URL"),
                         props.getProperty("DB_USERNAME"),
                         props.getProperty("DB_PASSWORD"));
+                log.info("connected to DB");
             }
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }catch (SQLException e){
+        }catch (IOException | ClassNotFoundException | SQLException e) {
+            log.info("Failed to open connection to DB");
             e.printStackTrace();
         }
-        return con;
+        return conn;
     }
 
     public static void DBClose(){
         try {
-            con.close();
-            log.info("ShutingDown Connection");
+            conn.close();
+            log.info("ShuttingDown Connection");
         }catch (SQLException e){
             log.info("Failed to Close Db Connection");
         }
