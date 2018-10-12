@@ -7,10 +7,13 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.jumia.jdbc.datacopy.DBCatalogReader;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 @Data
 
@@ -20,22 +23,24 @@ public class Gui {
     private static MultiWindowTextGUI multiWindowTextGUI;
 
     public Gui() throws IOException {
-        this.terminal = new DefaultTerminalFactory().createTerminal();
-        this.screen = new TerminalScreen(terminal);
-        this.multiWindowTextGUI = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
+        terminal = new DefaultTerminalFactory().createTerminal();
+        screen = new TerminalScreen(terminal);
+        multiWindowTextGUI = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
     }
 
     public void start() throws IOException {
         screen.startScreen();
     }
 
-    public void design(){
+    public void initDesign() throws SQLException {
         Panel panel = new Panel();
         panel.setLayoutManager(new GridLayout(2));
         ComboBox<String> comboBox=new ComboBox<String>();
-        comboBox.addItem("item 1");
-        comboBox.addItem("itemmmmmmmmmmmmmmmmmmm 2");
-        comboBox.addItem("item 3");
+        DBCatalogReader catalogReader=new DBCatalogReader();
+        List<String> databaseList= catalogReader.getDatabaseCatalog();
+        for (String database : databaseList){
+            comboBox.addItem(database);
+        }
         panel.addComponent(comboBox);
 
         // Create window to hold the panel
