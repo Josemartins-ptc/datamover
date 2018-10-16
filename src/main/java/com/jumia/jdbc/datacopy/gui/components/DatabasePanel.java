@@ -1,9 +1,7 @@
 package com.jumia.jdbc.datacopy.gui.components;
 
 import com.googlecode.lanterna.gui2.*;
-import com.jumia.jdbc.datacopy.gui.components.combos.DBCombo;
-import com.jumia.jdbc.datacopy.gui.components.combos.DataCombo;
-import com.jumia.jdbc.datacopy.gui.components.combos.TableCombo;
+import com.jumia.jdbc.datacopy.gui.components.combos.*;
 import com.jumia.jdbc.datacopy.gui.guicontrollers.GuiController;
 
 
@@ -19,7 +17,7 @@ public class DatabasePanel {
     //combos
     private DataCombo dbCombo=null;
     private DataCombo tableCombo=null;
-    private ComboBox<String> sourceFieldCombo=null;
+    private DataCombo sourceFieldCombo=null;
     private ComboBox<String> destinationFieldCombo=null;
 
     public DatabasePanel(){
@@ -36,15 +34,17 @@ public class DatabasePanel {
         basePanel.setLayoutManager(new GridLayout(5));
         databasePanel.setLayoutManager(new LinearLayout(Direction.HORIZONTAL).setSpacing(10));
 
-        tableCombo=new TableCombo();
-        dbCombo=new DBCombo(tableCombo);
+
+        dbCombo=new DatabaseCombo();
         databasePanel.addComponent(dbCombo.getComBoBox());
 
-
+        tableCombo=new TableCombo();
+        EventBroadCaster.registerBrodcaster(dbCombo,tableCombo);
         tbPanel.addComponent(tableCombo.getComBoBox());
 
-        sourceFieldCombo=new ComboBox<String>("g","h","j");
-        sourceFieldPanel.addComponent(sourceFieldCombo);
+        sourceFieldCombo=new SourceFieldCombo();
+        EventBroadCaster.registerBrodcaster(tableCombo,sourceFieldCombo);
+        sourceFieldPanel.addComponent(sourceFieldCombo.getComBoBox());
 
         destinationFieldCombo=new ComboBox<String>("k","l","m");
         destinationFieldPanel.addComponent(destinationFieldCombo);

@@ -1,31 +1,38 @@
 package com.jumia.jdbc.datacopy.gui.components.combos;
 
 
-
 import com.googlecode.lanterna.gui2.ComboBox;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
-public class TableCombo extends EventBroadCaster implements DataCombo,EventObserver {
+@Slf4j
+public class TableCombo implements DataCombo,EventBroadCaster {
 
+    private final UUID uuid;
     private ComboBox<String> comboBox;
-    private List<String> bagOfItens;
-    private int currentlySelectedItem=0;
+    private List<String> comboItens;
+    private int currentlySelectedItem = 0;
+    WorkContext workContext = WorkContext.getInstance();
 
-    public TableCombo(){
-        this.bagOfItens=guiController.getTables("");
-        this.comboBox=new ComboBox<>(bagOfItens);
-        this.comboBox.addListener(listener);
+    public TableCombo() {
+        super();
+        uuid=UUID.randomUUID();
+        comboItens = Collections.emptyList();
+        comboBox = new ComboBox<>(comboItens);
+        comboBox.setSelectedIndex(-1);
+        comboBox.setReadOnly(true);
+        comboBox.addListener(listener);
     }
 
-    private ComboBox.Listener listener=new ComboBox.Listener(){
-        @Override
-        public void onSelectionChanged(int selectedIndex, int previousSelection) {
-            System.out.println("Selected Index: " + selectedIndex + ", previous: " + previousSelection);
-            System.out.println(comboBox.getItem(selectedIndex));
-            currentlySelectedItem=selectedIndex;
-            //Interested inform
-        }
+    private ComboBox.Listener listener = (selectedIndex, previousSelection) -> {
+        log.info("detected combo Changes..updating table combo..Was " + previousSelection + " now is " + selectedIndex);
+        workContext.setTable(comboBox.getSelectedItem());
+        currentlySelectedItem = selectedIndex;
+        notifyNotificands(this);
     };
 
     @Override
@@ -39,8 +46,8 @@ public class TableCombo extends EventBroadCaster implements DataCombo,EventObser
     }
 
     @Override
-    public void OnDataComboEvent() {
-       ;
+    public void inform() {
+        rePopulate();
     }
 
     @Override
@@ -49,13 +56,35 @@ public class TableCombo extends EventBroadCaster implements DataCombo,EventObser
     }
 
     @Override
-    public List<String> getBagOfItens() {
-        return this.bagOfItens;
+    public List<String> getComboItens() {
+        return this.comboItens;
     }
 
+
+
+    private void rePopulate() {
+        if (comboBox.getItemCount() > 0) {
+            comboBox = comboBox.clearItems();
+        }
+       workContext = WorkContext.getInstance();
+        this.comboItens = guiController.getTables(workContext.getDatabase());
+        for (String item : comboItens) {
+            this.comboBox.addItem(item);
+        }
+        workContext.setTable(comboBox.getSelectedItem());
+    }
 
     @Override
-    public void OnEvent(DataCombo dc) {
-        notifyObservers(dc);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TableCombo that = (TableCombo) o;
+        return Objects.equals(uuid, that.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 }
+

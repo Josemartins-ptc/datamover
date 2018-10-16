@@ -24,11 +24,27 @@ public class GuiController {
 
     public List<String> getTables(String database){
         List<String> tablesBag=Collections.emptyList();
+        if (database.isEmpty()){
+            return tablesBag;
+        }
         try{
             tablesBag=dbCatalogReader.getTableCatalog(database);
         }catch (SQLException ex){
             log.info("Failed to read TablesCatalog from " + database);
         }
         return tablesBag;
+    }
+
+    public List<String> getFields(String database,String table){
+        List<String> fieldsBag=Collections.emptyList();
+        if (table.isEmpty()){
+            return fieldsBag;
+        }
+        try{
+            fieldsBag=dbCatalogReader.getFieldCatalog(database,table);
+        }catch (SQLException ex){
+            log.info("failed to read fields catalog");
+        }
+        return fieldsBag;
     }
 }

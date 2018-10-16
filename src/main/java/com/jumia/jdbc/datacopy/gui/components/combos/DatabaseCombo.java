@@ -2,34 +2,43 @@ package com.jumia.jdbc.datacopy.gui.components.combos;
 
 import com.googlecode.lanterna.gui2.ComboBox;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
+@Slf4j
 @Data
-public class DBCombo extends EventBroadCaster implements DataCombo,EventObserver {
+public class DatabaseCombo  implements DataCombo,EventBroadCaster {
 
-    private DataCombo _self;
+    private final UUID uuid;
     private ComboBox<String> comboBox;
     private List<String> bagOfItens = guiController.getDatabases();
     private int currentlySelectedItem=0;
 
-    public DBCombo(EventObserver obs){
-        super(obs);
+    public DatabaseCombo(){
+        super();
+        uuid=UUID.randomUUID();
         this.comboBox=new ComboBox<>(bagOfItens);
         this.comboBox.addListener(listener);
-        _self=this;
     }
 
     private ComboBox.Listener listener=new ComboBox.Listener(){
         @Override
         public void onSelectionChanged(int selectedIndex, int previousSelection) {
-            //TODO Refactor
-            System.out.println("Selected Index: " + selectedIndex + ", previous: " + previousSelection);
-            System.out.println(comboBox.getItem(selectedIndex));
+            log.info("detected combo Changes..updating dependents");
             currentlySelectedItem=selectedIndex;
-            OnEvent(_self);
+            setWorkContext(currentlySelectedItem);
+            inform();
+
         }
     };
+
+    private void setWorkContext(int selectedIndex){
+        WorkContext workContext=WorkContext.getInstance();
+        workContext.setDatabase(comboBox.getItem(selectedIndex));
+    }
 
 
     @Override
@@ -48,19 +57,25 @@ public class DBCombo extends EventBroadCaster implements DataCombo,EventObserver
     }
 
     @Override
-    public List<String> getBagOfItens() {
+    public List<String> getComboItens() {
         return bagOfItens;
     }
 
-
     @Override
-    public void OnEvent(DataCombo dc) {
-        notifyObservers(dc);
-
+    public void inform() {
+        notifyNotificands(this);
     }
 
     @Override
-    public void OnDataComboEvent() {
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DatabaseCombo that = (DatabaseCombo) o;
+        return Objects.equals(getUuid(), that.getUuid());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUuid());
     }
 }

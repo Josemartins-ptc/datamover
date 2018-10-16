@@ -9,10 +9,8 @@ import java.util.List;
 public interface DataCombo {
     GuiController guiController=new GuiController();
     String getItem();
-    List<String> getBagOfItens();
+    List<String> getComboItens();
     ComboBox<String> getComBoBox();
     ComboBox<String> addListener(ComboBox.Listener listener);
-    void OnDataComboEvent();
-
-
+    void inform();
 }

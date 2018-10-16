@@ -1,28 +1,22 @@
 package com.jumia.jdbc.datacopy.gui.components.combos;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public abstract class EventBroadCaster {
+public interface EventBroadCaster {
 
-    private List<EventObserver> observers;
+    Map<DataCombo,DataCombo> notificators=new HashMap<>();
 
-     EventBroadCaster(){
-        observers=new LinkedList<>();
+    static void registerBrodcaster(DataCombo notificator, DataCombo notificand) {
+        notificators.put(notificator,notificand);
     }
 
-    public EventBroadCaster(EventObserver observer){
-        this();
-        registerObserver(observer);
+    default void unRegisterNotificator(DataCombo notificator) {
+        notificators.remove(notificator);
     }
 
-    protected final void registerObserver(EventObserver observer){
-        observers.add(observer);
-    }
-
-    protected void notifyObservers(DataCombo dc){
-        for(EventObserver obs:observers){
-            dc.OnDataComboEvent();
-        }
+    default  DataCombo notifyNotificands(DataCombo notificator) {
+        DataCombo notified= notificators.get(notificator);
+        notified.inform();
+        return notified;
     }
 }
