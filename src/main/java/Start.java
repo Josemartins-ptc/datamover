@@ -8,7 +8,7 @@ public class Start {
 
         Gui gui=new Gui();
         gui.start();
-        gui.initDesign();
+        gui.design();
 
     }
 }
