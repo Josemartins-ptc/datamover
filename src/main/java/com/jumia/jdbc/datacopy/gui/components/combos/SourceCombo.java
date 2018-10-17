@@ -9,14 +9,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
-public class SourceFieldCombo implements DataCombo,EventBroadCaster {
+public class SourceCombo implements DataCombo,EventBroadCaster {
 
     private final UUID uuid;
     private ComboBox<String> comboBox;
     private List<String> comboItens;
     private int currentlySelectedItem=0;
 
-    public SourceFieldCombo(){
+    public SourceCombo(){
         super();
         uuid=UUID.randomUUID();
         comboItens= Collections.emptyList();
@@ -29,7 +29,7 @@ public class SourceFieldCombo implements DataCombo,EventBroadCaster {
     private ComboBox.Listener listener= (selectedIndex, previousSelection) -> {
         log.info("detected combo Changes..updating sourcefield combo");
         currentlySelectedItem=selectedIndex;
-
+        notifyNotificands(this);
     };
 
     @Override
@@ -73,7 +73,7 @@ public class SourceFieldCombo implements DataCombo,EventBroadCaster {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SourceFieldCombo that = (SourceFieldCombo) o;
+        SourceCombo that = (SourceCombo) o;
         return Objects.equals(uuid, that.uuid);
     }
 

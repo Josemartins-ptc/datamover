@@ -18,7 +18,7 @@ public class DatabasePanel {
     private DataCombo dbCombo=null;
     private DataCombo tableCombo=null;
     private DataCombo sourceFieldCombo=null;
-    private ComboBox<String> destinationFieldCombo=null;
+    private DataCombo destinationFieldCombo=null;
 
     public DatabasePanel(){
         guiController=new GuiController();
@@ -42,12 +42,13 @@ public class DatabasePanel {
         EventBroadCaster.registerBrodcaster(dbCombo,tableCombo);
         tbPanel.addComponent(tableCombo.getComBoBox());
 
-        sourceFieldCombo=new SourceFieldCombo();
+        sourceFieldCombo=new SourceCombo();
         EventBroadCaster.registerBrodcaster(tableCombo,sourceFieldCombo);
         sourceFieldPanel.addComponent(sourceFieldCombo.getComBoBox());
 
-        destinationFieldCombo=new ComboBox<String>("k","l","m");
-        destinationFieldPanel.addComponent(destinationFieldCombo);
+        destinationFieldCombo=new DestinationCombo();
+        EventBroadCaster.registerBrodcaster(sourceFieldCombo,destinationFieldCombo);
+        destinationFieldPanel.addComponent(destinationFieldCombo.getComBoBox());
 
 
         basePanel.addComponent(databasePanel.withBorder(Borders.singleLine("Select Database")));
