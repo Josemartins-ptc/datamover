@@ -1,4 +1,4 @@
-package com.jumia.jdbc.datacopy;
+package com.jumia.jdbc.datacopy.api.models;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
