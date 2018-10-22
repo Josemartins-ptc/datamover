@@ -1,6 +1,7 @@
 package com.jumia.jdbc.datacopy.gui.components.combos;
 
 import com.googlecode.lanterna.gui2.ComboBox;
+import com.jumia.jdbc.datacopy.api.WorkContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

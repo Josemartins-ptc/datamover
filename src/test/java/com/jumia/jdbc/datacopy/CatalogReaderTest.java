@@ -1,5 +1,7 @@
 package com.jumia.jdbc.datacopy;
 
+import com.jumia.jdbc.datacopy.api.controllers.DBCatalogService;
+import com.jumia.jdbc.datacopy.api.controllers.DBConnection;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,11 +14,11 @@ import java.util.List;
 @Slf4j
 class CatalogReaderTest {
 
-    private DBCatalogReader catalogReader;
+    private DBCatalogService catalogReader;
 
     @BeforeEach
     public void initialize(){
-        catalogReader=new DBCatalogReader();
+        catalogReader=new DBCatalogService();
     }
 
     @Test
@@ -50,6 +52,16 @@ class CatalogReaderTest {
             log.info("could not get fields from table");
         }
         log.info("Fields detected = " + fieldBag.toString());
+    }
+
+    @Test
+    void getTypes(){
+        List<String> typebag=Collections.emptyList();
+        try{
+            catalogReader.getfieldTypeInfo("test","pet");
+        }catch (SQLException e){
+            log.info("Could not get types");
+        }
     }
 
     @AfterAll

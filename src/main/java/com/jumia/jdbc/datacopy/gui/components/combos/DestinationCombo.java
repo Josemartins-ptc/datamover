@@ -1,6 +1,7 @@
 package com.jumia.jdbc.datacopy.gui.components.combos;
 
 import com.googlecode.lanterna.gui2.ComboBox;
+import com.jumia.jdbc.datacopy.api.WorkContext;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -65,6 +66,8 @@ public class DestinationCombo implements DataCombo,EventBroadCaster {
         for (String item: comboItens){
             this.comboBox.addItem(item);
         }
+        comboBox.setSelectedIndex(0);
+        workContext.setDestinationField(comboBox.getSelectedItem());
     }
 
     @Override

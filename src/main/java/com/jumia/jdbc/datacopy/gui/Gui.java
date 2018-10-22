@@ -7,6 +7,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.jumia.jdbc.datacopy.gui.components.DatabasePanel;
+import com.jumia.jdbc.datacopy.gui.components.WherePanel;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,9 +32,11 @@ public class Gui {
 
     public void design() throws IOException{
         DatabasePanel panel=new DatabasePanel();
+        WherePanel wherePanel =new WherePanel();
         // Create window to hold the panel
         BasicWindow window = new BasicWindow();
         window.setComponent(panel.build());
+
         multiWindowTextGUI.addWindowAndWait(window);
 
         screen.refresh();

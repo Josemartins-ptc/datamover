@@ -1,7 +1,8 @@
-package com.jumia.jdbc.datacopy;
+package com.jumia.jdbc.datacopy.api.controllers;
 
 import java.util.TimerTask;
 
+import com.jumia.jdbc.datacopy.api.models.DatabaseTask;
 import lombok.extern.slf4j.Slf4j;
 
 /**

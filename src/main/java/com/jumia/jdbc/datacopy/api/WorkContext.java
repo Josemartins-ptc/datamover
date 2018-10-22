@@ -1,4 +1,4 @@
-package com.jumia.jdbc.datacopy.gui.components.combos;
+package com.jumia.jdbc.datacopy.api;
 
 import lombok.Data;
 

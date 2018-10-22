@@ -1,4 +1,4 @@
-package com.jumia.jdbc.datacopy;
+package com.jumia.jdbc.datacopy.api.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ public class DBConnection {
                 log.info("connected to DB");
             }
         }catch (IOException | ClassNotFoundException | SQLException e) {
-            log.info("Failed to open connection to DB");
+            log.info("Failed to open connection to DB " + props.getProperty("DB_URL") + " with username " + props.getProperty("DB_USERNAME"));
             e.printStackTrace();
         }
         return conn;
